@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lukas Gearin - Developer Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --secondary: #f59e0b;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --white: #ffffff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--dark), var(--dark-light));
+            z-index: -1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s ease-in-out infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, -30px) rotate(180deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--white), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideUp 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            animation: slideUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: slideUp 1s ease 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--dark-light);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 1s ease;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .project-type {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid var(--primary);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: var(--primary-light);
+        }
+
+        /* Skills Section */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-category {
+            background: var(--dark-light);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-category h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-item {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid var(--secondary);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            text-align: center;
+            background: var(--dark-light);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--white);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 50px;
+            border: 1px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Developer Portfolio</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Lukas Gearin</h1>
+            <p>ML Engineer & AI Developer specializing in financial modeling, NLP systems, and deep learning architectures. I build systems that solve complex problems with cutting edge machine learning techniques.</p>
+            <a href="#projects" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <section id="projects" class="fade-in">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">Next Day Stock Price Forecast</h3>
+                    <span class="project-type">ML/Finance</span>
+                </div>
+                <p class="project-description">Engineered a predictive financial model implementing a stacked LSTM architecture with GRU units to predict next day stock prices by leveraging 5 day moving averages. Model achieved a MSE of 5.36e-5 with trend accuracy of 82%.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">LSTM</span>
+                    <span class="tech-tag">GRU</span>
+                    <span class="tech-tag">TensorFlow</span>
+                    <span class="tech-tag">Pandas</span>
+                </div>
+                <div class="project-links">
+                    <!--<a href="#" class="project-link">Model Analysis</a>--> 
+                    <a href="https://github.com/LukeJG/Trading-Algorithms" class="project-link">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">Financial News Impact Analysis</h3>
+                    <span class="project-type">NLP/Finance</span>
+                </div>
+                <p class="project-description">Building an NLP system using FinBERT, spaCy, and transformers to detect financial catalysts in news, integrating rule-based and ML driven sector mapping with an XGBoost directional impact classifier to forecast sector movements with confidence scoring.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">FinBERT</span>
+                    <span class="tech-tag">spaCy</span>
+                    <span class="tech-tag">XGBoost</span>
+                    <span class="tech-tag">Transformers</span>
+                    <span class="tech-tag">NLP</span>
+                </div>
+                <div class="project-links">
+                    <!--<a href="#" class="project-link">Demo</a>--> 
+                    <a href="https://github.com/LukeJG/Trading-Algorithms" class="project-link">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">Text-to-Speech AI System</h3>
+                    <span class="project-type">Deep Learning</span>
+                </div>
+                <p class="project-description">Implemented a transformer-based text-to-speech system leveraging VCTK data, incorporating BERT-based text tokenization, speaker conditioned encoding, LSTM-based mel spectrogram decoding, and a Griffin-Lim vocoder to generate synthetic speech.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">BERT</span>
+                    <span class="tech-tag">LSTM</span>
+                    <span class="tech-tag">Transformers</span>
+                    <span class="tech-tag">Griffin-Lim</span>
+                    <span class="tech-tag">PyTorch</span>
+                </div>
+                <div class="project-links">
+                    <!--<a href="#" class="project-link">Audio Samples</a>--> 
+                    <a href="https://github.com/LukeJG/Text-to-Speech-AI" class="project-link">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">Character-Level Language Model</h3>
+                    <span class="project-type">NLP</span>
+                </div>
+                <p class="project-description">Developed a character-level transformer-based language model to generate original text in the style of any inputted works, implementing multi-head self-attention, positional embeddings, and autoregressive decoding for creative language synthesis.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Transformers</span>
+                    <span class="tech-tag">Self-Attention</span>
+                    <span class="tech-tag">PyTorch</span>
+                    <span class="tech-tag">NLP</span>
+                </div>
+                <div class="project-links">
+                    <!--<a href="#" class="project-link">Text Samples</a>--> 
+                    <a href="https://github.com/LukeJG/Character-Level-Language-Model" class="project-link">GitHub</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">Bankruptcy RAG System</h3>
+                    <span class="project-type">RAG/Legal Tech</span>
+                </div>
+                <p class="project-description">Developed a Retrieval Augmented Generation (RAG) system for bankruptcy document analysis, integrating sentence chunking, semantic embedding with SentenceTransformers, and LLM-based answer generation using Hugging Face models for precise financial insights extraction.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">RAG</span>
+                    <span class="tech-tag">SentenceTransformers</span>
+                    <span class="tech-tag">Hugging Face</span>
+                    <span class="tech-tag">LLM</span>
+                    <span class="tech-tag">Legal Tech</span>
+                </div>
+                <div class="project-links">
+                    <!--<a href="#" class="project-link">Analysis</a>--> 
+                    <a href="https://github.com/LukeJG/RAG-System" class="project-link">GitHub</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">VisualLock</h3>
+                    <span class="project-type">Web App</span>
+                </div>
+                <p class="project-description">Designed and implemented a Django web application enabling encrypted messaging, where encryption keys are algorithmically derived from pixel matrices of user uploaded images, introducing image-based entropy into the encryption process.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Django</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Cryptography</span>
+                    <span class="tech-tag">Image Processing</span>
+                    <span class="tech-tag">PIL</span>
+                </div>
+                <div class="project-links">
+                 <!--  <a href="#" class="project-link">Live Demo</a>--> 
+                    <a href="#" class="project-link">GitHub</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">NBA Game Predictor</h3>
+                    <span class="project-type">ML/Sports</span>
+                </div>
+                <p class="project-description">Developed a NBA prediction system leveraging gradient boosted random forests paired with deep neural networks yielding results of 91% accuracy. Combines traditional ML with deep learning for superior sports analytics.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Random Forest</span>
+                    <span class="tech-tag">Gradient Boosting</span>
+                    <span class="tech-tag">Neural Networks</span>
+                    <span class="tech-tag">Scikit-learn</span>
+                    <span class="tech-tag">Sports Analytics</span>
+                </div>
+                <div class="project-links">
+                  <!--  <a href="#" class="project-link">Predictions</a> --> 
+                    <a href="#" class="project-link">GitHub</a>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <section id="skills" class="fade-in">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-container">
+            <div class="skill-category">
+                <h3>Machine Learning</h3>
+                <div class="skill-list">
+                    <span class="skill-item">TensorFlow</span>
+                    <span class="skill-item">PyTorch</span>
+                    <span class="skill-item">Pandas</span>
+                    <span class="skill-item">NumPy</span>
+                    <span class="skill-item">Scikit-learn</span>
+                    <span class="skill-item">Keras</span>
+                    <span class="skill-item">SciPy</span>
+                    <span class="skill-item">NLTK</span>
+                    <!--<span class="skill-item">LSTM</span>
+                    <span class="skill-item">Transformers</span>
+                    <span class="skill-item">XGBoost</span>
+                    <span class="skill-item">Random Forest</span>
+                    <span class="skill-item">Neural Networks</span>  Pandas, Numpy, Pytorch, Keras, Scikit Learn, TensorFlow, SciPy, NLTK--> 
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>NLP & AI</h3>
+                <div class="skill-list">
+                    <span class="skill-item">BERT</span>
+                    <span class="skill-item">FinBERT</span>
+                    <span class="skill-item">Large Language Models</span>
+                    <span class="skill-item">Text-to-Speech Systems</span>                   
+                    <span class="skill-item">Transformers</span>
+                    <span class="skill-item">RAG</span>
+                    <span class="skill-item">Agentic RAG</span>
+                    <span class="skill-item">spaCy</span>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Programming</h3>
+                <div class="skill-list">
+                    <span class="skill-item">Python</span>
+                    <span class="skill-item">Django</span>
+                    <span class="skill-item">Java</span>
+                    <span class="skill-item">HTML</span>
+                    <span class="skill-item">CSS</span>
+                    <span class="skill-item">JavaScript</span>
+                    <span class="skill-item">C</span>
+                    <span class="skill-item">SQL</span>
+   
+
+                    
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Data & Finance</h3>
+                <div class="skill-list">
+                    <span class="skill-item">Financial Modeling</span>
+                    <span class="skill-item">Time Series</span>
+                    <span class="skill-item">Data Visualization</span>
+                    <span class="skill-item">Statistical Analysis</span>
+                    <span class="skill-item">Quantitative Analysis</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="fade-in">
+        <h2 class="section-title">Let's Connect</h2>
+        <div class="contact-container">
+            <p>I'm always interested in hearing about new opportunities and exciting projects</p>
+            <div class="contact-links">
+                <a href="luke.gearin5@gmail.com" class="contact-link">
+                    <span>📧</span>
+                    Email
+                </a>
+                <a href="https://github.com/LukeJG" class="contact-link">
+                    <span>💻</span>
+                    GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/luke-gearin-39183622b/" class="contact-link">
+                    <span>💼</span>
+                    LinkedIn
+                </a>
+               
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Lukas Gearin</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add some dynamic interaction to project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Dynamic typing effect for hero section (optional enhancement)
+        const heroTitle = document.querySelector('.hero-content h1');
+        const originalText = heroTitle.textContent;
+        
+        function typeWriter(element, text, speed = 100) {
+            element.textContent = '';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            setTimeout(type, 1000); // Start after 1 second
+        }
+
+        // Uncomment the line below to enable typing effect
+        // typeWriter(heroTitle, originalText, 80);
+    </script>
+</body>
+</html>
